@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+.Table {
+    padding-top: 50px;
+    display: grid;
+    gap:15px;
+    justify-content: center;
+    color: #959494;
+    text-align: center;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+td {
+    padding: 0 1px 0 1px;
+}
+
+.line {
+
+}
+
+.day {
+    display: block;
+    width: 15px;
+    height: 15px;
+    background: #EDEDED;
+
+}
+
+.gradient {
+    padding-left: 19px;
+    display: grid;
+    gap: 4px;
+    grid-template-columns: 50px 15px  15px  15px  15px  15px 50px;
+    align-items: center;
+}
+
+.box {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin: 2px;
+}
+
+.block {
+    display: block;
+}
+
+.gray {
+    background: #EDEDED;
+}
+
+.lightBlue {
+    background: #ACD5F2;
+}
+
+.blue {
+    background: #7FA8C9;
+}
+
+.darkBlue {
+    background: #527BA0;
+}
+
+.blackBlue {
+    background: #254E77;
+    background: #254E77;
+}
+
+.title{
+    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    color: #959494;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
