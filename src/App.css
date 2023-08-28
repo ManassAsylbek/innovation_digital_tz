@@ -107,6 +107,7 @@ td {
 }
 
 .popover-content {
+    width: 140px;
     z-index: 100;
     position: absolute;
     top: -60px;
@@ -114,5 +115,13 @@ td {
     border-radius: 3px;
     background: #000;
     padding: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+.popover-title{
+    color: #FFF;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }

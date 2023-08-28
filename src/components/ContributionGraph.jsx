@@ -1,20 +1,35 @@
-import {subWeeks, startOfWeek, addDays, format, differenceInMonths, eachMonthOfInterval} from 'date-fns';
+import {subWeeks, startOfWeek, addDays, format, parse, eachMonthOfInterval} from 'date-fns';
 import {ru} from 'date-fns/locale';
-import {useEffect, useState} from "react";
+import {useEffect, useState,useRef} from "react";
 
 
-const Popover = ({content, children}) => {
+const Popover = ({content, children,}) => {
     const [isOpen, setIsOpen] = useState(false);
-
+    const popoverRef = useRef(null);
+    const parsedDate = parse(content[0][0], 'yyyy-MM-dd', new Date());
     const togglePopover = () => {
         setIsOpen(!isOpen);
     };
 
+
+    const handleClickOutside = (event) => {
+        if (popoverRef.current && !popoverRef.current.contains(event.target)) {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
     return (
-        <div className="popover-container">
+        <div className="popover-container"  ref={popoverRef}>
             {isOpen && (
                 <div className="popover-content">
-                    {content}
+                    <div className={"popover-title"}>{content[0][1]} contributions</div>
+                    <div className={"popover-text"}>{format(parsedDate, 'EEEE, MMMM d, yyyy', {locale: ru})} </div>
                 </div>
             )}
             <div className="popover-trigger" onClick={togglePopover}>
@@ -33,13 +48,16 @@ const ContributionGraph = () => {
     const [error, setError] = useState(null);
 
     const currentDate = new Date();
+
+    const textCurrentDay = format(currentDate, 'yyyy-MM-dd')
+
     const weeksAgo = subWeeks(currentDate, 50);
 
     const weekArray = Array.from({length: 51}, (_, index) => {
         const weekStart = startOfWeek(addDays(weeksAgo, index * 7), {weekStartsOn: 1});
         const weekDays = Array.from({length: 7}, (_, dayIndex) => {
             const day = addDays(weekStart, dayIndex);
-            return {[format(day, 'yyyy-MM-dd')]: ""};
+            return {[format(day, 'yyyy-MM-dd')]: 0, color: ""};
         });
         return weekDays;
     });
@@ -86,11 +104,26 @@ const ContributionGraph = () => {
                 let dateKey = Object.keys(item)[0]; // Получаем дату из ключа объекта
                 if (valuesObject[dateKey] !== undefined) {
                     // Проверяем, есть ли значение для этой даты
-                    if (valuesObject[dateKey] === 0) item[dateKey] = "gray"
-                    if (10 > valuesObject[dateKey] > 0) item[dateKey] = "lightBlue"
-                    if (20 > valuesObject[dateKey] > 9) item[dateKey] = "blue"
-                    if (31 > valuesObject[dateKey] > 19) item[dateKey] = "darkBlue"
-                    if (valuesObject[dateKey] > 30) item[dateKey] = "blackBlue"
+                    if (valuesObject[dateKey] === 0) {
+                        item[dateKey] = valuesObject[dateKey]
+                        item.color = "gray"
+                    }
+                    if (10 > valuesObject[dateKey] > 0) {
+                        item[dateKey] = valuesObject[dateKey]
+                        item.color = "lightBlue"
+                    }
+                    if (20 > valuesObject[dateKey] > 9) {
+                        item[dateKey] = valuesObject[dateKey]
+                        item.color = "blue"
+                    }
+                    if (31 > valuesObject[dateKey] > 19) {
+                        item[dateKey] = valuesObject[dateKey]
+                        item.color = "darkBlue"
+                    }
+                    if (valuesObject[dateKey] > 30) {
+                        item[dateKey] = valuesObject[dateKey]
+                        item.color = "blackBlue"
+                    }
                     // item[dateKey] = valuesObject[dateKey]; // Присваиваем значение
                 }
                 return item
@@ -152,8 +185,8 @@ const ContributionGraph = () => {
                                     <td>{getDayOfWeek(dayIndex)}</td>
                                     {data?.map((dateGroup, index) => (
                                         <td key={index}>
-                                            <Popover content="Это всплывающая подсказка">
-                                                <div className={`day ${Object.values(dateGroup[dayIndex])}`}/>
+                                            <Popover content={Object.entries(dateGroup[dayIndex])}>
+                                                <div className={`day ${dateGroup[dayIndex].color}`}/>
                                             </Popover>
                                         </td>
                                     ))}
@@ -164,11 +197,21 @@ const ContributionGraph = () => {
                     </div>
                     <div className={"gradient"}>
                         <span>Меньше</span>
-                        <span className={"box gray"}></span>
-                        <span className={"box lightBlue"}></span>
-                        <span className={"box blue"}></span>
-                        <span className={"box darkBlue"}></span>
-                        <span className={"box blackBlue"}></span>
+                        <Popover content={[[textCurrentDay,"No"]]}>
+                            <span className={"box gray"}></span>
+                        </Popover>
+                        <Popover content={[[textCurrentDay,"1-9"]]}>
+                            <span className={"box lightBlue"}></span>
+                        </Popover>
+                        <Popover content={[[textCurrentDay,"10-19"]]}>
+                            <span className={"box blue"}></span>
+                        </Popover>
+                        <Popover content={[[textCurrentDay,"20-29"]]}>
+                            <span className={"box darkBlue"}></span>
+                        </Popover>
+                        <Popover content={[[textCurrentDay,"+30"]]}>
+                            <span className={"box blackBlue"}></span>
+                        </Popover>
                         <span>Больше</span>
                     </div>
                 </div>
