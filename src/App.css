@@ -29,7 +29,11 @@ td {
     background: #EDEDED;
 
 }
-
+.day:hover{
+    width: 15px;
+    height: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.50)
+}
 .gradient {
     padding-left: 19px;
     display: grid;
@@ -81,4 +85,28 @@ td {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+
+
+
+
+.popover-container {
+    position: relative;
+    display: inline-block;
+
+}
+
+.popover-trigger {
+    cursor: pointer;
+}
+
+.popover-content {
+    z-index: 100;
+    position: absolute;
+    top: -60px;
+    left: -40px;
+    border-radius: 3px;
+    background: #000;
+    padding: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }

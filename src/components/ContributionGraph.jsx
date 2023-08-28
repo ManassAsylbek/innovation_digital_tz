@@ -1,6 +1,30 @@
 import {subWeeks, startOfWeek, addDays, format, differenceInMonths, eachMonthOfInterval} from 'date-fns';
 import {ru} from 'date-fns/locale';
-import  {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
+
+
+const Popover = ({content, children}) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const togglePopover = () => {
+        setIsOpen(!isOpen);
+    };
+
+    return (
+        <div className="popover-container">
+            {isOpen && (
+                <div className="popover-content">
+                    {content}
+                </div>
+            )}
+            <div className="popover-trigger" onClick={togglePopover}>
+                {children}
+            </div>
+
+        </div>
+    );
+};
+
 
 const ContributionGraph = () => {
     const [valuesObject, setValuesObject] = useState({})
@@ -34,7 +58,7 @@ const ContributionGraph = () => {
     };
 
 
-    function binarySearch(arr , targetDate) {
+    function binarySearch(arr, targetDate) {
         let left = 0;
         let right = arr.length - 1;
 
@@ -55,26 +79,26 @@ const ContributionGraph = () => {
     }
 
 
-useEffect(()=>{
-    const newArr = weekArray.map(innerArray => {
-        const arr = innerArray.map(item => {
+    useEffect(() => {
+        const newArr = weekArray.map(innerArray => {
+            const arr = innerArray.map(item => {
 
-            let dateKey = Object.keys(item)[0]; // Получаем дату из ключа объекта
-            if (valuesObject[dateKey] !== undefined) {
-                // Проверяем, есть ли значение для этой даты
-                if (valuesObject[dateKey] === 0) item[dateKey] = "gray"
-                if (10 > valuesObject[dateKey] > 0) item[dateKey] = "lightBlue"
-                if (20 > valuesObject[dateKey] > 9) item[dateKey] = "blue"
-                if (31 > valuesObject[dateKey] > 19) item[dateKey] = "darkBlue"
-                if (valuesObject[dateKey] > 30) item[dateKey] = "blackBlue"
-                // item[dateKey] = valuesObject[dateKey]; // Присваиваем значение
-            }
-            return item
+                let dateKey = Object.keys(item)[0]; // Получаем дату из ключа объекта
+                if (valuesObject[dateKey] !== undefined) {
+                    // Проверяем, есть ли значение для этой даты
+                    if (valuesObject[dateKey] === 0) item[dateKey] = "gray"
+                    if (10 > valuesObject[dateKey] > 0) item[dateKey] = "lightBlue"
+                    if (20 > valuesObject[dateKey] > 9) item[dateKey] = "blue"
+                    if (31 > valuesObject[dateKey] > 19) item[dateKey] = "darkBlue"
+                    if (valuesObject[dateKey] > 30) item[dateKey] = "blackBlue"
+                    // item[dateKey] = valuesObject[dateKey]; // Присваиваем значение
+                }
+                return item
+            })
+            return arr
         })
-        return arr
-    })
-    setData(newArr)
-},[valuesObject])
+        setData(newArr)
+    }, [valuesObject])
 
     useEffect(() => {
         // Выполняем fetch запрос при монтировании компонента
@@ -128,8 +152,9 @@ useEffect(()=>{
                                     <td>{getDayOfWeek(dayIndex)}</td>
                                     {data?.map((dateGroup, index) => (
                                         <td key={index}>
-                                            <div
-                                                className={`day ${Object.values(dateGroup[dayIndex])}`}/>
+                                            <Popover content="Это всплывающая подсказка">
+                                                <div className={`day ${Object.values(dateGroup[dayIndex])}`}/>
+                                            </Popover>
                                         </td>
                                     ))}
                                 </tr>
