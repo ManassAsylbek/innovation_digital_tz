@@ -41,6 +41,9 @@ const Popover = ({content, children,}) => {
 };
 
 
+
+
+
 const ContributionGraph = () => {
     const [valuesObject, setValuesObject] = useState({})
     const [data, setData] = useState([]);
@@ -101,26 +104,27 @@ const ContributionGraph = () => {
         const newArr = weekArray.map(innerArray => {
             const arr = innerArray.map(item => {
 
-                let dateKey = Object.keys(item)[0]; // Получаем дату из ключа объекта
+                let dateKey = Object.keys(item)[0];
+                console.log(Object.keys(item)[0])// Получаем дату из ключа объекта
                 if (valuesObject[dateKey] !== undefined) {
                     // Проверяем, есть ли значение для этой даты
                     if (valuesObject[dateKey] === 0) {
                         item[dateKey] = valuesObject[dateKey]
                         item.color = "gray"
                     }
-                    if (10 > valuesObject[dateKey] > 0) {
+                    if ( 9>= valuesObject[dateKey] && valuesObject[dateKey] > 0) {
                         item[dateKey] = valuesObject[dateKey]
                         item.color = "lightBlue"
                     }
-                    if (20 > valuesObject[dateKey] > 9) {
+                    if (19 >= valuesObject[dateKey] && valuesObject[dateKey] >= 10) {
                         item[dateKey] = valuesObject[dateKey]
                         item.color = "blue"
                     }
-                    if (31 > valuesObject[dateKey] > 19) {
+                    if (30 >= valuesObject[dateKey] && valuesObject[dateKey] >= 20 ) {
                         item[dateKey] = valuesObject[dateKey]
                         item.color = "darkBlue"
                     }
-                    if (valuesObject[dateKey] > 30) {
+                    if (valuesObject[dateKey] >= 31) {
                         item[dateKey] = valuesObject[dateKey]
                         item.color = "blackBlue"
                     }
@@ -143,6 +147,7 @@ const ContributionGraph = () => {
                 return response.json();
             })
             .then(data => {
+                console.log(data)
                 setValuesObject(data);
                 setLoading(false);
             })

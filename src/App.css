@@ -81,10 +81,10 @@ td {
 }
 
 .title{
-    margin-left: 20px;
+    margin-left: 10px;
     display: flex;
     justify-content: center;
-    gap: 35px;
+    gap: 41px;
     color: #959494;
     font-family: Inter;
     font-size: 12px;
